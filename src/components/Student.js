@@ -1,4 +1,5 @@
 import React, { useState }  from "react";
+import { withFirebase } from './Firebase';
 
 const Student = () => {
     const [nameStudent, setNameStudent] = useState('');
@@ -14,4 +15,4 @@ const Student = () => {
     )
 }
 
-export default Student;
+export default withFirebase(Student);

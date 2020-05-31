@@ -12,13 +12,13 @@ function App() {
         <Route
           exact path="/"
           render={() => (
-            <div >
+            <>
               <ul className="nav nav-bar">
                 <li className="m-3"><Link to="/manager">Manager</Link></li>
                 <li className="m-3"><Link to="/student">Student</Link></li>
                 <li className="m-3"><Link to="/teacher">Teacher</Link></li>
               </ul>
-            </div>
+            </>
           )}
         />
         <Route path="/manager" component={Manager} />
