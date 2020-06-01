@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { withFirebase } from "./Firebase";
 
 const Teacher = () => {
-  const [nameTeacher, setNameTeacher] = useState("");
-  const [lastNameTeacher, setLastNameTeacher] = useState("");
 
   return (
     <div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import Manager from "./components/Manager.js";
 import Student from "./components/Student.js";
@@ -6,6 +6,13 @@ import Teacher from "./components/Teacher.js";
 import "./App.css";
 
 function App() {
+  const [nameTeacher, setNameTeacher] = useState("");
+  const [lastNameTeacher, setLastNameTeacher] = useState("");
+  const [nameStudent, setNameStudent] = useState('');
+  const [lastNameStudent, setLastNameStudent] = useState('');
+  const [numberLessons, setNumberLessons] = useState('');
+  const [studentID, setStudentID] = useState('');
+
   return (
     <Router>
       <Switch>
@@ -21,9 +28,20 @@ function App() {
             </>
           )}
         />
-        <Route path="/manager" component={Manager} />
-        <Route path="/student" component={Student} />
-        <Route path="/teacher" component={Teacher} />
+        <Route path="/manager" render ={
+            ()=><Manager 
+              nameStudent={nameStudent} setNameStudent={setNameStudent}
+              lastNameStudent={lastNameStudent} setLastNameStudent={setLastNameStudent}
+              studentID={studentID} setStudentID={setStudentID}
+              numberLessons={numberLessons} setNumberLessons={setNumberLessons}
+            />
+          } />
+        <Route path="/student" render ={
+            ()=><Student />
+          } />
+        <Route path="/teacher" render ={
+            ()=><Teacher />
+          } />
       </Switch>
     </Router>
   );
