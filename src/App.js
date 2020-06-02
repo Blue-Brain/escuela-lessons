@@ -6,12 +6,14 @@ import Teacher from "./components/Teacher.js";
 import "./App.css";
 
 function App() {
-  const [nameTeacher, setNameTeacher] = useState("");
-  const [lastNameTeacher, setLastNameTeacher] = useState("");
+  const [nameTeacher, setNameTeacher] = useState('');
+  const [lastNameTeacher, setLastNameTeacher] = useState('');
+  const [teacherID, setTeacherID] = useState('')
   const [nameStudent, setNameStudent] = useState('');
   const [lastNameStudent, setLastNameStudent] = useState('');
   const [numberLessons, setNumberLessons] = useState('');
   const [studentID, setStudentID] = useState('');
+  const [lessonID, setLessonID] = useState('');
 
   return (
     <Router>

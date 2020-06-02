@@ -10,14 +10,14 @@ const Manager = ({
         setNumberLessons,
         numberLessons
     }) => {
-    const refName = useRef(null);
-    const refLastName = useRef(null);
+    const refNameStudent = useRef(null);
+    const refLastNameStudent = useRef(null);
     const refNumberLessons = useRef(null);
 
     const getStudentID = () => {
         firebase.firestore.collection("students")
-            .where("name", "==", refName.current.value)
-            .where("lastName", "==", refLastName.current.value)
+            .where("name", "==", refNameStudent.current.value)
+            .where("lastName", "==", refLastNameStudent.current.value)
             .get()
             .then((querySnapshot)=>{
                 querySnapshot.forEach((doc)=>{
@@ -38,8 +38,8 @@ const Manager = ({
         firebase.firestore.collection("students")
             .doc(studentID)
             .set({
-                name: refName.current.value,
-                lastName: refLastName.current.value,
+                name: refNameStudent.current.value,
+                lastName: refLastNameStudent.current.value,
                 numberLessons: numberLessons + Number(refNumberLessons.current.value)
             })
     }
@@ -51,9 +51,9 @@ const Manager = ({
     return  (
         <div>
             <h1 className="p-2">Менеджер</h1>
-            <input className="mx-5 my-1" placeholder="Имя" type="text" ref={refName}/>
+            <input className="mx-5 my-1" placeholder="Имя" type="text" ref={refNameStudent}/>
             <br />
-            <input className="mx-5 my-1" placeholder="Фамилия" type="text" ref={refLastName}/>
+            <input className="mx-5 my-1" placeholder="Фамилия" type="text" ref={refLastNameStudent}/>
             <br />
             <input className="mx-5 my-1" type="number" alt="количество занятий" ref={refNumberLessons}/>
             <br />
