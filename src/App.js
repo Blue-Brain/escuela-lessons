@@ -25,7 +25,6 @@ function App({ firebase }) {
       .then((querySnapshot) => {
         let id, balance, name, lastName;
         querySnapshot.forEach((doc) => {
-          console.log(doc.id);
           id = doc.id;
           balance = doc.data().numberLessons;
           name = doc.data().name;
