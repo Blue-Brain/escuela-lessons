@@ -1,14 +1,23 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
+import CONTEXT from "../constants/CONTEXT";
 import { withFirebase } from "./Firebase";
 
 const FormNewStudent = ({ firebase }) => {
   const refNameStudent = useRef(null);
   const refLastNameStudent = useRef(null);
   const refNumberLessons = useRef(null);
-  const refNumberPackage = useRef(null);
 
   const [notificationManager, setNotificationManager] = useState("");
   const [students, setStudents] = useState([]);
+
+  const { getStudentID, studentID, numberLastPackage, setStudentID } = useContext(CONTEXT);
+
+  const checkStudent = () => {
+    setStudentID("");
+    setNotificationManager(
+      "Такой студент не найден. Проверьте введенные данные"
+    );
+  };
 
   const createNewStudent = () => {
     if (
@@ -47,11 +56,40 @@ const FormNewStudent = ({ firebase }) => {
           .catch((err) => setNotificationManager(err));
       } else {
         setNotificationManager("Такой студент уже существует.");
+        setStudentID("");
       }
     } else {
       setNotificationManager("Заполните все поля!");
     }
   };
+
+  useEffect(()=>{
+    if (numberLastPackage) {
+      const addPackage = () => {
+        if (
+          refNameStudent.current.value &&
+          refLastNameStudent.current.value &&
+          refNumberLessons.current.value 
+        ) {
+          firebase.firestore 
+            .collection('students')
+            .doc(studentID)
+            .collection("packages")
+            .add({
+                numberLessons: +refNumberLessons.current.value.trim(),
+                volumePackage: +refNumberLessons.current.value.trim(),
+                numberPackage: numberLastPackage + 1
+            })
+            .then(()=>{
+              setNotificationManager("Добавлен новый пакет")
+            })
+        } else {
+          setNotificationManager("Заполните все поля!");
+        }
+      }
+      addPackage();
+    }
+  }, [firebase, numberLastPackage])
 
   useEffect(() => {
     const getAllStudents = () => {
@@ -87,22 +125,13 @@ const FormNewStudent = ({ firebase }) => {
           type="text"
           ref={refNameStudent}
         />
-        <div className="d-flex pr-1">
           <input
-            className="mr-1 my-1 input-manager col-6"
+            className="mr-1 my-1 input-manager col-12"
             type="number"
             placeholder="Баланс"
             alt="количество занятий"
             ref={refNumberLessons}
           />
-          <input
-            className="my-1 input-manager col-6"
-            type="number"
-            placeholder="№ пакета"
-            alt="количество занятий"
-            ref={refNumberPackage}
-          />
-        </div>
         <div className="d-flex pr-1"> 
           <button
             className="mr-1 btn btn-dark btn-color btn-manager col-6 d-inline"
@@ -112,13 +141,17 @@ const FormNewStudent = ({ firebase }) => {
           </button>
           <button
             className="btn btn-dark btn-color btn-manager col-6 d-inline"
-            onClick={() => createNewStudent()}
+            onClick={() => getStudentID(
+              refNameStudent.current.value.trim().toUpperCase(),
+              refLastNameStudent.current.value.trim().toUpperCase(),
+              checkStudent
+            )}
           >
             Добавить пакет
           </button>
         </div>
           {notificationManager ? (
-            <h3 className="mx-5 my-1">{notificationManager}</h3>
+            <h5 className="mx-5 my-1">{notificationManager}</h5>
           ) : (
             ""
           )}

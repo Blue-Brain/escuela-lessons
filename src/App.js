@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Manager from "./components/Manager.js";
 import Student from "./components/Student.js";
@@ -14,6 +14,7 @@ function App({ firebase }) {
   const [lastNameStudent, setLastNameStudent] = useState("");
   const [numberLessons, setNumberLessons] = useState(null);
   const [studentID, setStudentID] = useState(null);
+  const [numberLastPackage, setNumberLastPackage] = useState(null);
   const [tableLessons, setTableLessons] = useState([]);
 
   const getStudentID = (name, lastName, setNotification) => {
@@ -23,18 +24,19 @@ function App({ firebase }) {
       .where("lastName", "==", lastName)
       .get()
       .then((querySnapshot) => {
-        let id, balance, name, lastName;
+        let id;
+        let name;
+        let lastName;
         querySnapshot.forEach((doc) => {
           id = doc.id;
-          balance = doc.data().numberLessons;
           name = doc.data().name;
           lastName = doc.data().lastName;
-        });
-        if (id) {
-          setNameStudent(name);
-          setLastNameStudent(lastName);
-          setStudentID(id);
-          setNumberLessons(balance);
+          
+          });
+          if (id) {
+            setNameStudent(name);
+            setLastNameStudent(lastName);
+            setStudentID(id);
         } else {
           setNotification();
         }
@@ -43,6 +45,34 @@ function App({ firebase }) {
         console.log("ERROR" + err);
       });
   };
+
+  useEffect(()=>{
+    const getNumberLastPackage = () => {
+      let packages = [];
+      let balance = 0;
+      firebase.firestore
+        .collection("students")
+        .doc(studentID)
+        .collection("packages")
+        .get()
+        .then((snapshot)=>{
+          snapshot.forEach(
+            (doc)=>{
+            balance = balance + doc.data().numberLessons;
+            packages.push(doc.data().numberPackage)
+            console.log("№ пакета " + doc.data().numberPackage + " = " + doc.data().numberLessons)
+          })
+          setNumberLastPackage(packages.length);
+          setNumberLessons(balance);
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+    }
+    if (studentID) {
+      getNumberLastPackage();
+    }
+  }, [firebase, studentID])
 
   return (
     <CONTEXT.Provider
@@ -57,6 +87,7 @@ function App({ firebase }) {
         setStudentID,
         tableLessons,
         setTableLessons,
+        numberLastPackage,
         getStudentID,
       }}
     >
@@ -67,17 +98,6 @@ function App({ firebase }) {
             path="/"
             render={() => (
               <>
-                {/* <ul className="nav nav-bar">
-                  <li className="m-3">
-                    <Link to="/manager">Manager</Link>
-                  </li>
-                  <li className="m-3">
-                    <Link to="/student">Student</Link>
-                  </li>
-                  <li className="m-3">
-                    <Link to="/teacher">Teacher</Link>
-                  </li>
-                </ul> */}
               </>
             )}
           />
