@@ -4,7 +4,7 @@ import { withFirebase } from "./Firebase";
 
 const Student = () => {
   const Table = useContext(CONTEXT);
-  
+
   const refLastNameStudent = useRef(null);
   const refNameStudent = useRef(null);
 
@@ -19,42 +19,43 @@ const Student = () => {
 
   return (
     <>
-      <h1 className="p-2">Студент</h1>
-      <div>
+      <h1 className="p-2 text-center my-4">УЗНАЙ, СКОЛЬКО УРОКОВ ОСТАЛОСЬ В ШКОЛЕ</h1>
+      <div className="d-flex justify-content-center flex-column">
+        <h3 className="mx-5 my-1 text-center">Введите Фамилию и Имя, чтобы узнать ваш текущий баланс</h3>
         <input
-          className="mx-5 my-1"
+          className="mx-5 my-4 text-center mx-auto"
           placeholder="Фамилия"
           type="text"
           ref={refLastNameStudent}
         />
         <br />
         <input
-          className="mx-5 my-1"
+          className="mx-5 my-2 text-center mx-auto"
           placeholder="Имя"
           type="text"
           ref={refNameStudent}
         />
         <br />
         <button
-          className="btn btn-dark ml-5 my-1"
+          className="btn ml-5 my-4 btn-dark btn-color mx-auto"
           onClick={() => {
             Table.getStudentID(
-              refNameStudent.current.value.trim(),
-              refLastNameStudent.current.value.trim(),
+              refNameStudent.current.value.trim().toUpperCase(),
+              refLastNameStudent.current.value.trim().toUpperCase(),
               checkStudent
             );
           }}
         >
           Показать
         </button>
-      </div>
+      </div>  
       {Table.studentID ? (
-        <h3 className="mx-5 my-1">
+        <h3 className="mx-5 my-4 text-center">
           {Table.nameStudent} {Table.lastNameStudent}, у вас осталось занятий:{" "}
           {Table.numberLessons}
         </h3>
       ) : notificationStudent ? (
-        <h3 className="mx-5 my-1">{notificationStudent}</h3>
+        <h4 className="mx-5 my-2 error text-center">{notificationStudent}</h4>
       ) : (
         ""
       )}

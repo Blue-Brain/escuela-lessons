@@ -27,6 +27,7 @@ const Manager = ({ firebase }) => {
                 lastNameStudent: doc.data().lastNameStudent,
                 nameStudent: doc.data().nameStudent,
                 dateLesson: doc.data().dateLesson.seconds,
+                timeLesson: doc.data().timeLesson
               },
             });
           });

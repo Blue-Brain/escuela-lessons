@@ -8,12 +8,13 @@ const TableForManager = ({ tableLessons }) => {
   const renderRow = () => {
     let render = tableLessons.map((item) => {
       return (
-        <tr key={item.id}>
+        <tr valign="bottom" key={item.id}>
           <RowLessonManager
             idStudent={item.lesson.idStudent}
             nameStudent={item.lesson.nameStudent}
             lastNameStudent={item.lesson.lastNameStudent}
             dateLesson={item.lesson.dateLesson}
+            timeLesson={item.lesson.timeLesson}
           />
         </tr>
       );

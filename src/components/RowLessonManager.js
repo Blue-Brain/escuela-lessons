@@ -7,9 +7,11 @@ const RowLessonManager = ({
   nameStudent,
   lastNameStudent,
   dateLesson,
+  timeLesson
 }) => {
   const refNumberLessons = useRef(null);
   const [studentBalance, setStudentBalance] = useState(null);
+  const [volumePackage, setVolumePackage] = useState(null);
   
   const parseDate = new Date(dateLesson * 1000)
     .toString()
@@ -22,9 +24,10 @@ const RowLessonManager = ({
       .collection("students")
       .doc(idStudent)
       .set({
-        name: nameStudent,
-        lastName: lastNameStudent,
+        name: nameStudent.toUpperCase(),
+        lastName: lastNameStudent.toUpperCase(),
         numberLessons: +studentBalance + +refNumberLessons.current.value.trim(),
+        volumePackage: volumePackage
       })
       .then(() => {
         setStudentBalance(
@@ -42,22 +45,23 @@ const RowLessonManager = ({
         .get()
         .then((doc) => {
           setStudentBalance(doc.data().numberLessons);
+          setVolumePackage(doc.data().volumePackage);
         });
     };
     getStudentBalance();
   }, [studentBalance, idStudent, firebase]);
   return (
     <>
-      <td>{parseDate}</td>
+      <td><p className="p-0 m-0"><b>{parseDate}</b> - {timeLesson}</p></td>
       <td>{`${lastNameStudent} ${nameStudent}`}</td>
       <td>{studentBalance}</td>
       <td>
-        <button className="btn btn-dark" onClick={() => topUpBalansOfStudent()}>
+        <button className="btn btn-dark btn-color btn-manager" onClick={() => topUpBalansOfStudent()}>
           Пополнить баланс
         </button>
       </td>
       <td>
-        <input ref={refNumberLessons} type="number" />
+        <input className="input-manager" ref={refNumberLessons} type="number" placeholder="Баланс"/>
       </td>
     </>
   );
