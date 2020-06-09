@@ -10,7 +10,7 @@ const FormNewStudent = ({ firebase }) => {
   const [notificationManager, setNotificationManager] = useState("");
   const [students, setStudents] = useState([]);
 
-  const { getStudentID, studentID, numberLastPackage, setStudentID } = useContext(CONTEXT);
+  const { getStudentID, studentID, numberLastPackage, setStudentID, setTableLessons } = useContext(CONTEXT);
 
   const checkStudent = () => {
     setStudentID("");
@@ -18,6 +18,73 @@ const FormNewStudent = ({ firebase }) => {
       "Такой студент не найден. Проверьте введенные данные"
     );
   };
+
+  const getAllLessons = () => {
+    firebase.firestore
+      .collection("lessons")
+      .orderBy("dateLesson", "desc")
+      .get()
+      .then((querySnapshot) => {
+        let arrayLessons = [];
+        querySnapshot.forEach((doc) => {
+          arrayLessons.push({
+            id: doc.id,
+            lesson: {
+              idStudent: doc.data().idStudent,
+              idPackage: doc.data().idPackage,
+              lastNameStudent: doc.data().lastNameStudent,
+              nameStudent: doc.data().nameStudent,
+              dateLesson: doc.data().dateLesson.seconds,
+              timeLesson: doc.data().timeLesson
+            },
+          });
+        });
+        setTableLessons(arrayLessons);
+        setNotificationManager("");
+      });
+  };
+
+
+  const filterRows = () => {
+    if (refLastNameStudent.current.value && refNameStudent.current.value) {
+      firebase.firestore
+        .collection("lessons")
+        .where("lastNameStudent", "==", refLastNameStudent.current.value.toUpperCase())
+        .where("nameStudent", "==", refNameStudent.current.value.toUpperCase())
+        .get()
+        .then((querySnapshot) => {
+          let arrayLessons = [];
+          querySnapshot.forEach((doc) => {
+            arrayLessons.push({
+              id: doc.id,
+              lesson: {
+                idStudent: doc.data().idStudent,
+                idPackage: doc.data().idPackage,
+                lastNameStudent: doc.data().lastNameStudent,
+                nameStudent: doc.data().nameStudent,
+                dateLesson: doc.data().dateLesson.seconds,
+                timeLesson: doc.data().timeLesson
+              },
+            });
+          });
+          setTableLessons(arrayLessons);
+          setNotificationManager("");
+          if (!arrayLessons[0]){
+            setNotificationManager(
+              "Такой студент не найден. Проверьте введенные данные"
+            );
+          }
+        })
+        .catch((err)=>{
+          console.log(err)
+        });
+    } else {
+      setNotificationManager(
+        "Введите Фамилию и Имя студента"
+      );
+    }
+  };
+
 
   const createNewStudent = () => {
     if (
@@ -140,13 +207,13 @@ const FormNewStudent = ({ firebase }) => {
           />
         <div className="d-flex pr-1"> 
           <button
-            className="mr-1 btn btn-dark btn-color btn-manager col-6 d-inline"
+            className="mt-2 mr-1 btn btn-dark btn-color btn-manager col-6 d-inline"
             onClick={() => createNewStudent()}
           >
             Добавить студента
           </button>
           <button
-            className="btn btn-dark btn-color btn-manager col-6 d-inline"
+            className="mt-2 btn btn-dark btn-color btn-manager col-6 d-inline"
             onClick={() => getStudentID(
               refNameStudent.current.value.trim().toUpperCase(),
               refLastNameStudent.current.value.trim().toUpperCase(),
@@ -154,6 +221,20 @@ const FormNewStudent = ({ firebase }) => {
             )}
           >
             Добавить пакет
+          </button>
+        </div>
+        <div className="d-flex pr-1">
+          <button
+            className="mt-2 mr-1 btn btn-dark btn-color btn-manager col-6 d-inline"
+            onClick={() => filterRows()}
+          >
+            Фильтровать
+          </button>
+          <button
+            className="mt-2 btn btn-dark btn-color btn-manager col-6 d-inline"
+            onClick={() => getAllLessons()}
+          >
+            Сбросить
           </button>
         </div>
           {notificationManager ? (
