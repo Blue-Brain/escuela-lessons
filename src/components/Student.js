@@ -55,7 +55,7 @@ const Student = () => {
           {Table.numberLessons}
         </h3>
       ) : notificationStudent ? (
-        <h4 className="mx-5 my-2 error text-center">{notificationStudent}</h4>
+        <h4 className="mx-5 my-2 notification text-center">{notificationStudent}</h4>
       ) : (
         ""
       )}

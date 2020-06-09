@@ -42,13 +42,17 @@ input {
   height: 40px;
   font-size: 18px;  
 }
+.input-row {
+  width: 180px;
+}
+
 .btn-manager {
   width: 200px;
   height: 40px;
   font-size: 16px;
 }
 
-.error {
+.notification {
   color:#F18D3A
 }
 

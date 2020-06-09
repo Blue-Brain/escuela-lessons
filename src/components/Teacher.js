@@ -19,66 +19,95 @@ const Teacher = ({ firebase }) => {
     getStudentID,
   } = Student;
 
+  const clearNotification = () => {
+    setNotificationTeacher("")
+  }
+
   const checkStudent = () =>
     setNotificationTeacher(
       "Такой студент не найден. Проверьте введенные данные"
     );
 
-  useEffect(() => {
-    if (numberLessons && refDateLesson.current.value && refTimeLesson.current.value) {
-      const decrementsBalance = () => {
-        firebase.firestore
-          .collection("students")
-          .doc(studentID)
-          .set({
-            name: refNameStudent.current.value.trim().toUpperCase(),
-            lastName: refLastNameStudent.current.value.trim().toUpperCase(),
-            numberLessons: +numberLessons - 1,
-          });
-      };
-      decrementsBalance();
-    } else {
-      setNumberLessons("");
+  useEffect (()=>{
+    if (numberLessons===0) {
+      setNotificationTeacher("У этого студента кончились занятия, необходимо пополнить");
     }
-  }, [firebase, numberLessons, setNumberLessons]);
+  }, [numberLessons])
 
   useEffect(() => {
+    const writeLesson = (idPackage) => {
+      setNotificationTeacher("Обрабтка данных... ждите!");
+      firebase.firestore
+        .collection("lessons")
+        .add({
+          idStudent: studentID,
+          idPackage: idPackage,
+          lastNameStudent: refLastNameStudent.current.value.trim().toUpperCase(),
+          nameStudent: refNameStudent.current.value.trim().toUpperCase(),
+          dateLesson: new Date(refDateLesson.current.value),
+          timeLesson: refTimeLesson.current.value,
+        })
+        .then(() => {
+          if (studentID) {
+            setNotificationTeacher("Вы успешно записали урок");
+            setTimeout(() => {
+                setNotificationTeacher("");
+              }, 2000);
+    
+          } else {
+          }
+        })
+        .catch((err) => setNotificationTeacher(err));
+    };
+
     if (studentID) {
-      const writeLesson = () => {
-        if (
-          refLastNameStudent.current.value &&
-          refNameStudent.current.value &&
-          refDateLesson.current.value && 
-          refTimeLesson.current.value
-        ) {
-          console.log(refTimeLesson.current.value)
+      if (refDateLesson.current.value && refTimeLesson.current.value) {
+        const decrementsBalance = () => {
           firebase.firestore
-            .collection("lessons")
-            .add({
-              idStudent: studentID,
-              lastNameStudent: refLastNameStudent.current.value.trim().toUpperCase(),
-              nameStudent: refNameStudent.current.value.trim().toUpperCase(),
-              dateLesson: new Date(refDateLesson.current.value),
-              timeLesson: refTimeLesson.current.value,
+            .collection("students")
+            .doc(studentID)
+            .collection("packages")
+            .where("numberLessons", ">", 0)
+            .orderBy("numberLessons")
+            .limit(1)
+            .get()
+            .then((snapshot)=>{
+              snapshot.forEach((doc) => {
+                if (doc.id) {
+                  firebase.firestore
+                    .collection("students")
+                    .doc(studentID)
+                    .collection("packages")
+                    .doc(doc.id)
+                    .update({
+                      "numberLessons":  doc.data().numberLessons - 1
+                    })
+                    .then(()=>{
+                      writeLesson(doc.id)
+                    })
+                    .catch((err)=>{
+                      console.log(err)
+                    })
+                } else {
+                  // setNotificationTeacher("У этого студента кончились занятия, необходимо пополнить");
+                }
+                })
             })
-            .then(() => {
-              if (studentID) {
-                setNotificationTeacher("Вы успешно записали урок");
-                setTimeout(() => {
-                  setStudentID("");
-                  setNotificationTeacher("");
-                }, 2000);
-              }
+            .catch((err)=>{
+              console.log(err)
             })
-            .catch((err) => setNotificationTeacher(err));
-        } else {
-          setNotificationTeacher("Заполните все поля");
-          setStudentID("");
-        }
-      };
-      writeLesson();
+        };
+        decrementsBalance();
+     
+      } else {
+        setNotificationTeacher("Заполните все поля");
+        setStudentID("");
+        // setNumberLessons("");
+      }
     }
-  }, [firebase, studentID, setStudentID]);
+  }, [firebase, studentID, setNumberLessons, setStudentID]);
+
+  
 
   return (
     <>
@@ -115,14 +144,15 @@ const Teacher = ({ firebase }) => {
             getStudentID(
               refNameStudent.current.value.trim().toUpperCase(),
               refLastNameStudent.current.value.trim().toUpperCase(),
-              () => checkStudent()
+              () => checkStudent(),
+              () => clearNotification()
             )
           }
         >
           Записать урок
         </button>
         {notificationTeacher ? (
-          <h3 className="mx-5 my-2 error text-center">{notificationTeacher}</h3>
+          <h3 className="mx-5 my-2 notification text-center">{notificationTeacher}</h3>
         ) : (
           ""
         )}

@@ -18,6 +18,7 @@ function App({ firebase }) {
   const [tableLessons, setTableLessons] = useState([]);
 
   const getStudentID = (name, lastName, setNotification) => {
+    setStudentID("");
     firebase.firestore
       .collection("students")
       .where("name", "==", name)
@@ -37,12 +38,13 @@ function App({ firebase }) {
             setNameStudent(name);
             setLastNameStudent(lastName);
             setStudentID(id);
-        } else {
+          } else {
+          // clearNotification();
           setNotification();
         }
       })
       .catch((err) => {
-        console.log("ERROR" + err);
+        console.log(err);
       });
   };
 
@@ -60,7 +62,6 @@ function App({ firebase }) {
             (doc)=>{
             balance = balance + doc.data().numberLessons;
             packages.push(doc.data().numberPackage)
-            console.log("№ пакета " + doc.data().numberPackage + " = " + doc.data().numberLessons)
           })
           setNumberLastPackage(packages.length);
           setNumberLessons(balance);

@@ -48,6 +48,12 @@ const FormNewStudent = ({ firebase }) => {
                 volumePackage: +refNumberLessons.current.value.trim(),
                 numberPackage: 1
               })
+            let allStudents = students;
+            allStudents.push({
+              name: refNameStudent.current.value.trim().toUpperCase(),
+              lastName: refLastNameStudent.current.value.trim().toUpperCase(),
+            });
+            setStudents(allStudents);
             setNotificationManager("Создан новый студент!");
             setTimeout(() => {
               setNotificationManager("");
@@ -108,25 +114,25 @@ const FormNewStudent = ({ firebase }) => {
         });
     };
     getAllStudents();
-  }, [firebase]);
+  }, [firebase ]);
 
   return (
     <div className="col-3 my-5">
       <div className="form-manager">
         <input
-          className="my-1 input-manager col-12"
+          className="my-1 input-manager text-center col-12"
           placeholder="Фамилия"
           type="text"
           ref={refLastNameStudent}
         />
         <input
-          className="my-1 input-manager col-12"
+          className="my-1 input-manager text-center col-12"
           placeholder="Имя"
           type="text"
           ref={refNameStudent}
         />
           <input
-            className="mr-1 my-1 input-manager col-12"
+            className="mr-1 my-1 input-manager text-center col-12"
             type="number"
             placeholder="Баланс"
             alt="количество занятий"
@@ -151,7 +157,7 @@ const FormNewStudent = ({ firebase }) => {
           </button>
         </div>
           {notificationManager ? (
-            <h5 className="mx-5 my-1">{notificationManager}</h5>
+            <p className="my-3 text-center notification">{notificationManager}</p>
           ) : (
             ""
           )}

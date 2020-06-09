@@ -24,6 +24,7 @@ const Manager = ({ firebase }) => {
               id: doc.id,
               lesson: {
                 idStudent: doc.data().idStudent,
+                idPackage: doc.data().idPackage,
                 lastNameStudent: doc.data().lastNameStudent,
                 nameStudent: doc.data().nameStudent,
                 dateLesson: doc.data().dateLesson.seconds,

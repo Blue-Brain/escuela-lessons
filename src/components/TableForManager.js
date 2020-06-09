@@ -11,6 +11,7 @@ const TableForManager = ({ tableLessons }) => {
         <tr valign="bottom" key={item.id}>
           <RowLessonManager
             idStudent={item.lesson.idStudent}
+            idPackage={item.lesson.idPackage}
             nameStudent={item.lesson.nameStudent}
             lastNameStudent={item.lesson.lastNameStudent}
             dateLesson={item.lesson.dateLesson}
@@ -27,11 +28,13 @@ const TableForManager = ({ tableLessons }) => {
       <table className="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Дата</th>
-            <th scope="col">Студент</th>
-            <th scope="col">Количество занятий</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
+            <th align="center" scope="col">Дата</th>
+            <th align="center" scope="col">Студент</th>
+            <th align="center" scope="col">Остаток</th>
+            <th align="center" scope="col">Объём пакета</th>
+            <th align="center" scope="col">№ пакета</th>
+            <th align="center" scope="col"></th>
+            <th align="center" scope="col"></th>
           </tr>
         </thead>
         <tbody>{renderRow()}</tbody>
