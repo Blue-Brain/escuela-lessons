@@ -1,5 +1,6 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import { withFirebase } from "./Firebase";
+import CONTEXT from '../constants/CONTEXT';
 
 const RowLessonManager = ({
   firebase,
@@ -8,7 +9,8 @@ const RowLessonManager = ({
   lastNameStudent,
   dateLesson,
   timeLesson,
-  idPackage
+  idPackage,
+  idLesson
 }) => {
   const refNumberLessons = useRef(null);
   const [studentBalance, setStudentBalance] = useState(null);
@@ -21,6 +23,40 @@ const RowLessonManager = ({
     .slice(1, 4)
     .join("/");
 
+  const { setTableLessons, tableLessons } = useContext(CONTEXT);
+
+  const deleteLesson = () => {
+    firebase.firestore
+      .collection("students")
+      .doc(idStudent)
+      .collection("packages")
+      .doc(idPackage)
+      .update({
+        "numberLessons": +studentBalance + 1
+      })
+      .then(() => {
+        setStudentBalance(
+          +studentBalance + 1
+        );
+        firebase.firestore
+          .collection("lessons")
+          .doc(idLesson)
+          .delete()
+          .then(()=>{
+            let arrayLessons = [...tableLessons];
+            let indexLesson = arrayLessons.findIndex(lesson => lesson.id===idLesson);
+            arrayLessons.splice(indexLesson, 1);
+            setTableLessons(arrayLessons);
+          })
+
+        
+      })
+      .catch((err) => {
+        console.log(err)
+      });
+    
+  }
+  
   const topUpBalansOfStudent = () => {
     firebase.firestore
       .collection("students")
@@ -69,6 +105,11 @@ const RowLessonManager = ({
       </td>
       <td>
         <input className="input-manager input-row " ref={refNumberLessons} type="number" placeholder="Баланс"/>
+      </td>
+      <td>
+      <button type="button" className="close" aria-label="Close" onClick={()=>deleteLesson()}>
+        <span aria-hidden="true">&times;</span>
+      </button>
       </td>
     </>
   );
