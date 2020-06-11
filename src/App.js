@@ -39,7 +39,6 @@ function App({ firebase }) {
             setLastNameStudent(lastName);
             setStudentID(id);
           } else {
-          // clearNotification();
           setNotification();
         }
       })

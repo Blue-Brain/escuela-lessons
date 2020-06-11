@@ -21,7 +21,7 @@ const Student = () => {
     <>
       <h1 className="p-2 text-center my-4">УЗНАЙ, СКОЛЬКО УРОКОВ ОСТАЛОСЬ В ШКОЛЕ</h1>
       <div className="d-flex justify-content-center flex-column">
-        <h3 className="mx-5 my-1 text-center">Введите Фамилию и Имя, чтобы узнать ваш текущий баланс</h3>
+        <h3 className="mx-5 my-1 text-center">Введите фамилию и имя, чтобы узнать ваш текущий баланс</h3>
         <input
           className="mx-5 my-4 text-center mx-auto"
           placeholder="Фамилия"

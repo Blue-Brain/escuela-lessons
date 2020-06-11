@@ -52,7 +52,7 @@ const Teacher = ({ firebase }) => {
             setNotificationTeacher("Вы успешно записали урок");
             setTimeout(() => {
                 setNotificationTeacher("");
-              }, 2000);
+              }, 4000);
     
           } else {
           }
