@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "escuela-lessons"
+    "default": "escuela-lessons",
+    "test":"ecuela-lessons-test" 
   }
 }

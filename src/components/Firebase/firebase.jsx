@@ -1,6 +1,6 @@
 import app from 'firebase/app';
 import 'firebase/firestore';
-import { DEVELOP as CONFIG } from '../../constants/config.fb';
+import { PRODUCTION as CONFIG } from '../../constants/config.fb';
 
 const firebaseConfig = {
     apiKey: CONFIG.apiKey,
