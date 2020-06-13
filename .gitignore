@@ -26,5 +26,5 @@ yarn-error.log*
 /src/constants/config.fb.js
 
 #hosting
-/firebase
+/.firebase/hosting.YnVpbGQ.cache
 
