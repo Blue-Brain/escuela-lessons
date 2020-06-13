@@ -1,4 +1,5 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
+import Toast from 'light-toast';
 import { withFirebase } from "./Firebase";
 import CONTEXT from "../constants/CONTEXT";
 
@@ -24,19 +25,23 @@ const Teacher = ({ firebase }) => {
   }
 
   const checkStudent = () =>
-    setNotificationTeacher(
-      "Такой студент не найден. Проверьте введенные данные"
-    );
+    Toast.info("Такой студент не найден.", 4000, ()=> {
+      setNotificationTeacher(
+        "Проверьте введенные данные"
+      );
+    })
 
   useEffect (()=>{
     if (numberLessons===0) {
-      setNotificationTeacher("У этого студента кончились занятия, необходимо пополнить");
+      Toast.fail("Кончились занятия", 4000, ()=>{
+        setNotificationTeacher("У этого студента кончились занятия, необходимо пополнить");
+      })
     }
   }, [numberLessons])
 
   useEffect(() => {
     const writeLesson = (idPackage) => {
-      setNotificationTeacher("Обрабтка данных... ждите!");
+      Toast.loading("Обработка данных... ждите!");
       firebase.firestore
         .collection("lessons")
         .add({
@@ -49,11 +54,8 @@ const Teacher = ({ firebase }) => {
         })
         .then(() => {
           if (studentID) {
-            setNotificationTeacher("Вы успешно записали урок");
-            setTimeout(() => {
-                setNotificationTeacher("");
-              }, 4000);
-    
+            Toast.hide();
+            Toast.success("Вы успешно записали урок", 6000 )
           } else {
           }
         })
@@ -61,8 +63,9 @@ const Teacher = ({ firebase }) => {
     };
 
     if (studentID) {
+      clearNotification();
       if (refDateLesson.current.value && refTimeLesson.current.value) {
-        const decrementsBalance = () => {
+          const decrementsBalance = () => {
           firebase.firestore
             .collection("students")
             .doc(studentID)
@@ -98,7 +101,7 @@ const Teacher = ({ firebase }) => {
         decrementsBalance();
      
       } else {
-        setNotificationTeacher("Заполните все поля");
+        Toast.info("Заполните все поля", 4000)
         setStudentID("");
       }
     }
