@@ -120,24 +120,20 @@ const Teacher = ({ firebase }) => {
           type="text"
           ref={refLastNameStudent}
         />
-        <br />
         <input
           className="my-3 text-center mx-auto"
           placeholder="Имя студента"
           type="text"
           ref={refNameStudent}
         />
-        <br />
         <input 
           className="my-3 text-center mx-auto"
           type="date" 
           ref={refDateLesson} />
-        <br />
         <input 
           className="my-3 text-center mx-auto"
           type="time" 
           ref={refTimeLesson} />
-        <br />
         <button
           className="btn ml-5 my-4 btn-dark btn-color mx-auto"
           onClick={() =>
