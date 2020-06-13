@@ -88,10 +88,8 @@ const Teacher = ({ firebase }) => {
                     .catch((err)=>{
                       console.log(err)
                     })
-                } else {
-                  // setNotificationTeacher("У этого студента кончились занятия, необходимо пополнить");
-                }
-                })
+                } 
+              })
             })
             .catch((err)=>{
               console.log(err)
@@ -102,7 +100,6 @@ const Teacher = ({ firebase }) => {
       } else {
         setNotificationTeacher("Заполните все поля");
         setStudentID("");
-        // setNumberLessons("");
       }
     }
   }, [firebase, studentID, setNumberLessons, setStudentID]);
@@ -111,9 +108,9 @@ const Teacher = ({ firebase }) => {
 
   return (
     <>
-      <h1 className="p-2 text-center my-4">ЗАПИШИТЕ ЗАНЯТИЕ, ПРОВЕДЕННОЕ В ШКОЛЕ ESCUELA</h1>
+      <h1 className="p-2 text-center my-4">ЗАПИШИТЕ ЗАНЯТИЕ, ПРОВЕДЕННОЕ В ШКОЛЕ</h1>
       <div className="d-flex justify-content-center flex-column">
-      <h3 className="mx-5 my-1 text-center">Введите Фамилию и Имя студента, чтобы записать урок</h3>
+      <h3 className="mx-5 my-1 text-center">Введите фамилию и имя студента, дату и время урока, что бы записать занятие</h3>
         <input
           className="my-3 text-center mx-auto"
           placeholder="Фамилия студента"
