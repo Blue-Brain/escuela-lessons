@@ -10,6 +10,7 @@ const TableForManager = ({ tableLessons }) => {
       return (
         <tr valign="bottom" key={item.id}>
           <RowLessonManager
+            idLesson ={item.id}
             idStudent={item.lesson.idStudent}
             idPackage={item.lesson.idPackage}
             nameStudent={item.lesson.nameStudent}
@@ -33,6 +34,7 @@ const TableForManager = ({ tableLessons }) => {
             <th align="center" scope="col">Остаток</th>
             <th align="center" scope="col">Объём пакета</th>
             <th align="center" scope="col">№ пакета</th>
+            <th align="center" scope="col"></th>
             <th align="center" scope="col"></th>
             <th align="center" scope="col"></th>
           </tr>
