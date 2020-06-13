@@ -82,12 +82,11 @@ const RowLessonManager = ({
         .doc(idStudent)
         .collection("packages")
         .doc(idPackage)
-        .get()
-        .then((doc) => {
+        .onSnapshot((doc)=>{
           setStudentBalance(doc.data().numberLessons);
           setVolumePackage(doc.data().volumePackage);
           setNumberPackage(doc.data().numberPackage);
-        });
+        })
     };
     getStudentBalance();
   }, [studentBalance, idStudent, firebase]);
