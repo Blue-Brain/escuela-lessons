@@ -1,4 +1,4 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The micro solution for online school https://escuela.pro
 
 ## Available Scripts
 
