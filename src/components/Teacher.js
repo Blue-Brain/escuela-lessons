@@ -129,7 +129,7 @@ const Teacher = ({ firebase, location }) => {
       </h1>
       <div className="d-flex justify-content-center flex-column">
         <h3 className="mx-5 my-1 text-center">
-          Введите фамилию и имя студента, дату и время урока, что бы записать
+          Введите фамилию и имя студента, дату и время урока, чтобы записать
           занятие
         </h3>
         <input
